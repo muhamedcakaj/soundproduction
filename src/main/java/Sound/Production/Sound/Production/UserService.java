@@ -7,16 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
+
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
-    public LoginResponseDTO login(LoginRequestDTO request) {
+    public Map<String, Object> login(LoginRequestDTO request) {
 
         UserEntity user = userRepository
                 .findByUsername(request.getUsername())
@@ -32,6 +36,8 @@ public class UserService {
                     "Invalid username or password"
             );
         }
-        return new LoginResponseDTO(user);
+        String token = jwtUtil.generateToken(user);
+
+        return Map.of("token", token);
     }
 }

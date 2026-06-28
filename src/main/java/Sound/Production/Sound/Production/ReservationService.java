@@ -1,6 +1,8 @@
 package Sound.Production.Sound.Production;
 
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +17,7 @@ public class ReservationService {
     }
     // READ ALL
     public List<ReservationEntity> findAll() {
-        return reservationRepository.findAll();
+        return reservationRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     // READ BY ID
